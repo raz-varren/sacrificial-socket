@@ -43,7 +43,7 @@ func (c *perRPCCreds) GetRequestMetadata(ctx context.Context, uri ...string) (ma
 		c.tokenStr = tok
 		c.l.Unlock()
 
-		log.Info.Println("token refreshed:", tok)
+		log.Info.Println("token refreshed")
 	}
 
 	meta["authorization"] = "Bearer " + tok
