@@ -75,6 +75,7 @@ func (s *Socket) send(data interface{}) error {
 	return websocket.Message.Send(s.ws, data)
 }
 
+//InRoom returns true if s is currently a member of roomName
 func (s *Socket) InRoom(roomName string) bool {
 	s.roomsl.RLock()
 	defer s.roomsl.RUnlock()
