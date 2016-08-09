@@ -1,0 +1,27 @@
+
+#container{
+	width: 400px;
+	margin: 30px auto 0px auto;
+}
+
+#messages{
+	height: 200px;
+	overflow-y: scroll;
+}
+
+.control-item{
+	margin-top: 15px;
+}
+
+#message-send-btn,
+#clear-messages-btn{
+	width: 100%;
+}
+
+#message-list{
+	padding-left: 25px;
+}
+
+.message-item{
+	margin-bottom: 8px;
+}

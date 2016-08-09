@@ -1,0 +1,36 @@
+#main{
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+	margin-top: 50px;
+}
+
+#controls{
+	width: 400px
+}
+
+.control-block{
+	margin-bottom: 15px;
+}
+
+#btn-clear{
+	margin-bottom: 15px;
+}
+
+.ctrl-btn{
+	/*width: 140px;*/
+}
+
+.btn-100{
+	width: 100%;
+}
+
+#messages-container{
+	width: 500px;
+	margin-left: 100px;
+}
+
+#messages{
+	height: 500px;
+	overflow-y: scroll;
+}

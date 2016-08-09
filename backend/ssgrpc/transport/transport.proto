@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package transport;
+
+service Propagate {
+	rpc DoBroadcast(Broadcast) returns (Result);
+	rpc DoRoomcast(Roomcast) returns (Result);
+}
+
+message Broadcast {
+	//unix nano timestamp
+	fixed64 timestamp = 1;
+	string event = 2;
+	bytes data = 3;
+	DataType dataType = 4;
+}
+
+message Roomcast {
+	//unix nano timestamp
+	fixed64 timestamp = 1;
+	string room = 2;
+	string event = 3;
+	bytes data = 4;
+	DataType dataType = 5;
+}
+
+enum DataType {
+	STR = 0;
+	BIN = 1;
+	JSON = 2;
+}
+
+message Result {
+	bool success = 1;
+	//
+	//should be the original unix nano timestamp sent by the client
+	//useful for calculating round trip time
+	fixed64 timestamp  = 2;
+}

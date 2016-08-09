@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sacrificial-Socket Chat Client</title>
+		<link type="text/css" rel="stylesheet" href="/css/app.css">
+		<link 
+			rel="stylesheet" 
+			href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
+			integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
+			crossorigin="anonymous"
+		>
+	</head>
+	<body>
+		<div id="container">
+			<div id="messages" class="well well-sm">
+				<ul id="message-list"></ul>
+			</div>
+			
+			<div id="controls">
+				<div class="control-item">
+					<div id="clear-messages-btn" class="btn btn-default">Clear Messages</div>
+				</div>
+				
+				<div class="control-item">
+					<label for="name-input">Name:</label>
+					<input id="name-input" class="form-control" type="text" value="stranger" />
+				</div>
+			
+				<div class="control-item">
+					<label for="join-room-input">Join Chat Room:</label>
+					<div class="input-group">
+						<input id="join-room-input" class="form-control" type="text" value="global" />
+						<div class="input-group-btn">
+							<div id="join-room-btn" class="btn btn-info">Join</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="control-item">
+					<textarea id="message-body-input" class="form-control" placeholder="Type message here"></textarea>
+				</div>
+				
+				<div class="control-item">
+					<div id="message-send-btn" class="btn btn-success">Send Message</div>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" src="/js/sacrificial-socket.js"></script>
+		<script type="text/javascript" src="/js/app.js"></script>
+	</body>
+</html>
