@@ -15,7 +15,7 @@ import (
 )
 
 //GRPCMHB... yep that's what I'm calling it. All you need to know is that GRPCMHB
-//satifies the ss.MultihomeBackend interface
+//satisfies the ss.MultihomeBackend interface
 type GRPCMHB struct {
 	peerList          []string
 	peers             map[string]*propagateClient
