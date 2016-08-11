@@ -170,6 +170,7 @@
 	});
 	
 	function getWierd(){
+		
 		var rooms = [
 			'unknownplace',
 			'trl',
@@ -210,7 +211,6 @@
 			var action = actions[rand(0, actions.length-1)],
 				phrase = phrases[rand(0, phrases.length-1)],
 				room   = rooms[rand(0, rooms.length-1)];
-				phrase = (Date.now()/1000)+' - '+phrase;
 				
 			if(action == 'echo'){
 				ws.emit('echo', phrase);
@@ -237,6 +237,7 @@
 			}
 		}, 100);
 	}
+	
 })(window);
 
 

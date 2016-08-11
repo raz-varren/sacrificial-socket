@@ -8,7 +8,6 @@ Sacrificial-Socket also has a MultihomeBackend interface for syncronizing broadc
 package ss
 
 import (
-	"bytes"
 	"golang.org/x/net/websocket"
 	"io"
 	"net/http"
@@ -149,7 +148,6 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 
 	for {
 		var msg []byte
-		var eventName string
 
 		err := s.receive(&msg)
 		if err == io.EOF {
@@ -160,19 +158,18 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 			return
 		}
 
-		buf := bytes.NewBuffer(nil)
-		eventNameRead := false
+		
+		eventName := ""
+		contentIdx := 0
 
-		for _, chr := range msg {
-			if !eventNameRead && chr == startOfDataByte {
-				eventName = buf.String()
-				eventNameRead = true
-				buf.Reset()
-			} else {
-				buf.WriteByte(chr)
+		for idx, chr := range msg {
+			if chr == startOfDataByte {
+				eventName = string(msg[:idx])
+				contentIdx = idx+1
+				break
 			}
 		}
-		if !eventNameRead {
+		if eventName == "" {
 			continue //no event to dispatch
 		}
 
@@ -181,7 +178,7 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 		serv.l.RUnlock()
 
 		if exists {
-			go e.eventHandler(s, buf.Bytes())
+			go e.eventHandler(s, msg[contentIdx:])
 		}
 	}
 }
