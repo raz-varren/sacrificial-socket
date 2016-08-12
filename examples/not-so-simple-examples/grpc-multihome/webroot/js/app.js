@@ -40,6 +40,8 @@
 	btnGetWierd       = get('#btn-wierd'),
 	btnGetNormal      = get('#btn-normal'),
 	messages          = get('#messages'),
+	autoScroll        = get('#chk-auto-scroll'),
+	clearMessages     = get('#chk-clear-periodically'),
 	addMessage        = function(msg){
 		var li = document.createElement('li'),
 			dt = new Date(),
@@ -47,7 +49,7 @@
 		
 		li.innerText = msg;
 		messages.appendChild(li);
-		messages.scrollTop = messages.scrollHeight;
+		if(autoScroll.checked) messages.scrollTop = messages.scrollHeight;
 	};
 	
 	ws.onConnect(function(){
@@ -168,6 +170,10 @@
 	btnClear.addEventListener('click', function(){
 		messages.innerHTML = "";
 	});
+	
+	window.setInterval(function(){
+		if(clearMessages.checked) messages.innerHTML = "";
+	}, 60000);
 	
 	function getWierd(){
 		
