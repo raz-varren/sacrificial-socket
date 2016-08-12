@@ -2,13 +2,13 @@ package ssgrpc
 
 import (
 	"encoding/json"
+	ss "github.com/raz-varren/sacrificial-socket"
+	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc/transport"
+	"github.com/raz-varren/sacrificial-socket/log"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"net"
-	ss "github.com/raz-varren/sacrificial-socket"
-	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc/transport"
-	"github.com/raz-varren/sacrificial-socket/log"
 	"strings"
 	"sync"
 	"time"
@@ -44,7 +44,7 @@ func NewBackend(tlsKeyFile, tlsCertFile, grpcHostPort string, sharedKey []byte, 
 	}
 }
 
-//NewInsecureBackend returns a GRPCMHB that will use no encryption or authentication to connect to the 
+//NewInsecureBackend returns a GRPCMHB that will use no encryption or authentication to connect to the
 //peers in peerList
 //
 //It is highly discouraged to use this for production systems, as all data will be sent in clear

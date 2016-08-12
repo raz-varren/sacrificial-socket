@@ -3,12 +3,12 @@ package ssgrpc
 import (
 	"encoding/json"
 	"errors"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc/metadata"
 	ss "github.com/raz-varren/sacrificial-socket"
 	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc/token"
 	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc/transport"
 	"github.com/raz-varren/sacrificial-socket/log"
+	"golang.org/x/net/context"
+	"google.golang.org/grpc/metadata"
 	"strings"
 	"sync"
 )

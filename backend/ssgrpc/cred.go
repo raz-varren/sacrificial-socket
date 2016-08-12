@@ -1,9 +1,9 @@
 package ssgrpc
 
 import (
-	"golang.org/x/net/context"
 	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc/token"
 	"github.com/raz-varren/sacrificial-socket/log"
+	"golang.org/x/net/context"
 	"sync"
 	"time"
 )

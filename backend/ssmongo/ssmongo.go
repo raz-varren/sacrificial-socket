@@ -2,11 +2,11 @@ package ssmongo
 
 import (
 	"encoding/json"
+	ss "github.com/raz-varren/sacrificial-socket"
+	"github.com/raz-varren/sacrificial-socket/log"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"
-	ss "github.com/raz-varren/sacrificial-socket"
-	"github.com/raz-varren/sacrificial-socket/log"
 	"sync"
 	"time"
 )
@@ -14,13 +14,13 @@ import (
 //MMHB implements ss.MultihomeBackend and uses MongoDB to syncronize between
 //multiple machines running ss.SocketServer
 type MMHB struct {
-	session    *mgo.Session
-	serverC    *mgo.Collection
-	roomcastC  *mgo.Collection
-	broadcastC *mgo.Collection
-	server     backendServer
+	session       *mgo.Session
+	serverC       *mgo.Collection
+	roomcastC     *mgo.Collection
+	broadcastC    *mgo.Collection
+	server        backendServer
 	pollFrequency time.Duration
-	l          *sync.RWMutex
+	l             *sync.RWMutex
 }
 
 //NewMongoDBBackend returns a new instance of MMHB which satisfies the ss.MultihomeBackend interface.
@@ -46,13 +46,13 @@ func NewBackend(mongoURL, serverName, serverGroup string, pollFrequency time.Dur
 	}
 
 	return &MMHB{
-		session:    m,
-		serverC:    db.C("ss.activeServers"),
-		roomcastC:  db.C("ss.roomcasts"),
-		broadcastC: db.C("ss.broadcasts"),
-		server:     s,
+		session:       m,
+		serverC:       db.C("ss.activeServers"),
+		roomcastC:     db.C("ss.roomcasts"),
+		broadcastC:    db.C("ss.broadcasts"),
+		server:        s,
 		pollFrequency: pollFrequency,
-		l:          &sync.RWMutex{},
+		l:             &sync.RWMutex{},
 	}
 }
 

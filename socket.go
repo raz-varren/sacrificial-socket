@@ -3,9 +3,9 @@ package ss
 import (
 	"bytes"
 	"encoding/json"
-	"golang.org/x/net/websocket"
 	"github.com/raz-varren/sacrificial-socket/log"
 	"github.com/raz-varren/sacrificial-socket/tools"
+	"golang.org/x/net/websocket"
 	"sync"
 )
 

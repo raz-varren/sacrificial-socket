@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	ss "github.com/raz-varren/sacrificial-socket"
 	"log"
 	"net/http"
-	ss "github.com/raz-varren/sacrificial-socket"
 )
 
 func main() {

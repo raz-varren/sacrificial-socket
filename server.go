@@ -8,12 +8,12 @@ Sacrificial-Socket also has a MultihomeBackend interface for syncronizing broadc
 package ss
 
 import (
+	"github.com/raz-varren/sacrificial-socket/log"
 	"golang.org/x/net/websocket"
 	"io"
 	"net/http"
 	"os"
 	"os/signal"
-	"github.com/raz-varren/sacrificial-socket/log"
 	"sync"
 	"syscall"
 )
@@ -158,14 +158,13 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 			return
 		}
 
-		
 		eventName := ""
 		contentIdx := 0
 
 		for idx, chr := range msg {
 			if chr == startOfDataByte {
 				eventName = string(msg[:idx])
-				contentIdx = idx+1
+				contentIdx = idx + 1
 				break
 			}
 		}

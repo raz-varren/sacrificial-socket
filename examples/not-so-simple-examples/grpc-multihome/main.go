@@ -3,11 +3,11 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"github.com/raz-varren/sacrificial-socket"
+	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc"
 	"log"
 	"net/http"
 	"os"
-	"github.com/raz-varren/sacrificial-socket"
-	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc"
 	"strings"
 	//"time"
 )
@@ -101,20 +101,20 @@ func EchoJSON(s *ss.Socket, data []byte) {
 	var m message
 	err := json.Unmarshal(data, &m)
 	check(err)
-	
+
 	s.Emit("echojson", m)
 }
 
 func Join(s *ss.Socket, data []byte) {
 	d := string(data)
 	s.Join(d)
-	s.Emit("echo", "joined room:" + d)
+	s.Emit("echo", "joined room:"+d)
 }
 
 func Leave(s *ss.Socket, data []byte) {
 	d := string(data)
 	s.Leave(d)
-	s.Emit("echo", "left room:" + d)
+	s.Emit("echo", "left room:"+d)
 }
 
 func Roomcast(s *ss.Socket, data []byte) {
@@ -129,7 +129,7 @@ func RoomcastBin(s *ss.Socket, data []byte) {
 	var r roomcast
 	err := json.Unmarshal(data, &r)
 	check(err)
-	
+
 	s.Roomcast(r.Room, "roomcastbin", []byte(r.Data))
 }
 
@@ -141,12 +141,11 @@ func RoomcastJSON(s *ss.Socket, data []byte) {
 	s.Roomcast(r.Room, "roomcastjson", r)
 }
 
-
 func Broadcast(s *ss.Socket, data []byte) {
 	s.Broadcast("broadcast", string(data))
 }
 
-func BroadcastBin(s *ss.Socket, data []byte){
+func BroadcastBin(s *ss.Socket, data []byte) {
 	s.Broadcast("broadcastbin", data)
 }
 
@@ -154,7 +153,7 @@ func BroadcastJSON(s *ss.Socket, data []byte) {
 	var m message
 	err := json.Unmarshal(data, &m)
 	check(err)
-	
+
 	s.Broadcast("broadcastjson", m)
 }
 
