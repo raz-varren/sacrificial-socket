@@ -1,3 +1,6 @@
+/*
+A complex web app example that implements ssgrpc for synchronizing multiple Sacrificial Socket instances
+*/
 package main
 
 import (

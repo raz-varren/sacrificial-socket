@@ -1,3 +1,6 @@
+/*
+Package log is used all throughout Sacrificial Socket for logging info and error messages
+*/
 package log
 
 import (

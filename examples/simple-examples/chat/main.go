@@ -1,3 +1,6 @@
+/*
+A simple web chat app example that does not implement any multihome backends.
+*/
 package main
 
 import (

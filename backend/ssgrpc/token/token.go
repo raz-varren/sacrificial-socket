@@ -1,13 +1,12 @@
+/*
+Package token is used by package ssgrpc for generating and validating HMAC-SHA256 tokens sent as "per RPC credentials".
+*/
 package token
 
 import (
 	"encoding/json"
 	"errors"
-	//"fmt"
 	"github.com/dvsekhvalnov/jose2go"
-	//"net/http"
-	//"strings"
-	//"sync"
 	"time"
 )
 

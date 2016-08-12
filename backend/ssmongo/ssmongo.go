@@ -1,3 +1,6 @@
+/*
+Package ssmongo provides a ss.MultihomeBackend interface that uses MongoDB for synchronizing broadcasts and roomcasts between multiple Sacrificial Socket instances.
+*/
 package ssmongo
 
 import (

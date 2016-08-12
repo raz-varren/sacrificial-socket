@@ -1,3 +1,6 @@
+/*
+Package tools is really just used during socket creation to generate random numbers for socket IDs.
+*/
 package tools
 
 import (

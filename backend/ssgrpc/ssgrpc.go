@@ -1,3 +1,6 @@
+/*
+Package ssgrpc provides a ss.MultihomeBackend interface that uses grpc with profobufs for synchronizing broadcasts and roomcasts between multiple Sacrificial Socket instances.
+*/
 package ssgrpc
 
 import (
