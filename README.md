@@ -7,7 +7,7 @@ Sacrificial-Socket supports rooms, roomcasts, broadcasts, and event emitting jus
 
 Sacrificial-Socket also has a MultihomeBackend interface for syncronizing broadcasts and roomcasts across multiple instances of Sacrificial-Socket running on multiple machines. Out of the box Sacrificial-Socket provides a MultihomeBackend interface for the popular noSQL database MongoDB, and one for the not so popular GRPC protocol, for syncronizing instances on multiple machines.
 
-In depth examples can be found in the __examples__ directory and full documentation can be found at [Godoc.org](https://godoc.org/github.com/raz-varren/sacrificial-socket "Sacrificial-Socket Documentation")
+In depth examples can be found in the [__examples__ ](https://github.com/raz-varren/sacrificial-socket/tree/master/examples "Examples") directory and full documentation can be found at [__Godoc.org__](https://godoc.org/github.com/raz-varren/sacrificial-socket "Sacrificial-Socket Documentation")
 
 Usage
 -----
