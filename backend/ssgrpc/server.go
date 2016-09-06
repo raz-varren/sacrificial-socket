@@ -80,7 +80,7 @@ func (p *propagateServer) DoBroadcast(ctx context.Context, b *transport.Broadcas
 
 	switch b.DataType {
 	case transport.DataType_JSON:
-		d := make(map[string]interface{})
+		var d interface{}
 		err := json.Unmarshal(b.Data, &d)
 		if err != nil {
 			return tr, err
@@ -123,7 +123,7 @@ func (p *propagateServer) DoRoomcast(ctx context.Context, r *transport.Roomcast)
 
 	switch r.DataType {
 	case transport.DataType_JSON:
-		d := make(map[string]interface{})
+		var d interface{}
 		err := json.Unmarshal(r.Data, &d)
 		if err != nil {
 			return tr, err

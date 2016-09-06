@@ -27,7 +27,7 @@ type MMHB struct {
 }
 
 //NewMongoDBBackend returns a new instance of MMHB which satisfies the ss.MultihomeBackend interface.
-//A new database "SSMultihome" will be created at the specified mongoURL, and under it 3 collections "activeServers",
+//A new database "SSMultihome" will be created at the specified mongoURL, and under it 3 collections "ss.activeServers",
 //"ss.roomcasts", and "ss.broadcasts" will be created if they don't already exist.
 //
 //serverName must be unique per running ss.SocketServer instance, otherwise broadcasts, and roomcasts
@@ -209,7 +209,6 @@ func (mmhb *MMHB) BroadcastFromBackend(b chan<- *ss.BroadcastMsg) {
 			var d interface{}
 			d = bcast.Data
 			if bcast.JSON {
-				d = make(map[string]interface{})
 				err = json.Unmarshal(bcast.Data.([]byte), &d)
 				if err != nil {
 					log.Err.Println(err)
@@ -272,7 +271,6 @@ func (mmhb *MMHB) RoomcastFromBackend(r chan<- *ss.RoomMsg) {
 			var d interface{}
 			d = rcast.Data
 			if rcast.JSON {
-				d = make(map[string]interface{})
 				err = json.Unmarshal(rcast.Data.([]byte), &d)
 				if err != nil {
 					log.Err.Println(err)
