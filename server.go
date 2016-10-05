@@ -131,6 +131,16 @@ func (serv *SocketServer) SetMultihomeBackend(b MultihomeBackend) {
 	serv.hub.setMultihomeBackend(b)
 }
 
+//Roomcast dispatches an event to all Sockets in the specified room.
+func (serv *SocketServer) Roomcast(roomName, eventName string, data interface{}) {
+	serv.hub.roomcast(&RoomMsg{roomName, eventName, data})
+}
+
+//Broadcast dispatches an event to all Sockets on the SocketServer.
+func (serv *SocketServer) Broadcast(eventName string, data interface{}) {
+	serv.hub.broadcast(&BroadcastMsg{eventName, data})
+}
+
 //loop handles all the coordination between new sockets
 //reading frames and dispatching events
 func (serv *SocketServer) loop(ws *websocket.Conn) {
