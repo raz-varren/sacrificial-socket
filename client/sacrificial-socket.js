@@ -5,15 +5,40 @@
 	* @class SS
 	* @constructor
 	* @param {String} url - The url to the sacrificial-socket server endpoint. The url must conform to the websocket URI Scheme ("ws" or "wss")
+	* @param {Object} opts - connection options
+	*
+	* Default opts = {
+	*     reconnectOpts: {
+	*         enabled: true, 
+	*         replayOnConnect: true, 
+	*         intervalMS: 5000
+	*     }
+	* }
+	*
 	*/
-	var SS = function(url){
+	var SS = function(url, opts){
+		opts = opts || {};
+		
 		var	self                = this,
-			ws                  = new WebSocket(url, 'sac-sock'),
 			events              = {},
+			reconnectOpts       = {enabled: true, replayOnConnect: true, intervalMS: 5000},
+			reconnecting        = false,
+			connectedOnce       = false,
 			headerStartCharCode = 1,
 			headerStartChar     = String.fromCharCode(headerStartCharCode),
 			dataStartCharCode   = 2,
-			dataStartChar       = String.fromCharCode(dataStartCharCode);
+			dataStartChar       = String.fromCharCode(dataStartCharCode),
+			ws                  = new WebSocket(url, 'sac-sock');
+		
+		//we really only support reconnect options for now
+		if(typeof opts.reconnectOpts == 'object'){
+			for(var i in opts.reconnectOpts){
+				if(!opts.reconnectOpts.hasOwnProperty(i)) continue;
+				reconnectOpts[i] = opts.reconnectOpts[i];
+			}
+		}
+		
+		self.noop = function(){ };
 		
 		//sorry, only supporting arraybuffer at this time
 		//maybe if there is demand for it, I'll add Blob support
@@ -68,29 +93,74 @@
 			
 			if(eventName.length === 0) return; //no event to dispatch
 			if(typeof events[eventName] === 'undefined') return;
-			events[eventName]((headers.J) ? JSON.parse(data) : data);
+			events[eventName].call(self, (headers.J) ? JSON.parse(data) : data);
 		};
+		
+		/**
+		* startReconnect is an internal function for reconnecting after an unexpected disconnect
+		*
+		* @function startReconnect
+		*
+		*/
+		function startReconnect(){
+			setTimeout(function(){
+				console.log('attempting reconnect');
+				var newWS = new WebSocket(url, 'sac-sock');
+				newWS.onmessage = ws.onmessage;
+				newWS.onclose = ws.onclose;
+				newWS.binaryType = ws.binaryType;
+				
+				//we need to run the initially set onConnect function on first successful connect,
+				//even if replayOnConnect is disabled. The server might not be available on first
+				//connection attempt.
+				if(reconnectOpts.replayOnConnect || !connectedOnce){
+					newWS.onopen = ws.onopen;
+				}
+				ws = newWS;
+				if(!reconnectOpts.replayOnConnect && connectedOnce){
+					self.onConnect(self.noop);
+				}
+			}, reconnectOpts.intervalMS);
+		}
 		
 		/**
 		* onConnect registers a callback to be run when the websocket connection is open.
 		* 
 		* @method onConnect
-		* @param {Function} callback(SS) - The callback that will be executed when the websocket connection opens. 
+		* @param {Function} callback(event) - The callback that will be executed when the websocket connection opens. 
 		*
 		*/
 		self.onConnect = function(callback){
-			ws.onopen = function(){ callback(self); };
+			ws.onopen = function(){ 
+				connectedOnce = true;
+				var args = arguments;
+				callback.apply(self, args);
+				if(reconnecting){
+					reconnecting = false;
+				}
+			};
 		};
+		self.onConnect(self.noop);
 		
 		/**
 		* onDisconnect registers a callback to be run when the websocket connection is closed.
 		*
 		* @method onDisconnect
-		* @param {Function} callback(SS) - The callback that will be executed when the websocket connection is closed.
+		* @param {Function} callback(event) - The callback that will be executed when the websocket connection is closed.
 		*/
 		self.onDisconnect = function(callback){
-			ws.onclose = function(){ callback(self); };
+			ws.onclose = function(){ 
+				var args = arguments;
+				if(!reconnecting && connectedOnce){
+					callback.apply(self, args);
+				}
+				if(reconnectOpts.enabled){
+					reconnecting = true;
+					startReconnect();
+				} 
+			};
 		};
+		self.onDisconnect(self.noop);
 		
 		/**
 		* on registers an event to be called when the client receives an emit from the server for
@@ -162,6 +232,7 @@
 		* @method close
 		*/
 		self.close = function(){
+			reconnectOpts.enabled = false; //don't reconnect if close is called
 			return ws.close();
 		};
 	};
