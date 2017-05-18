@@ -1,48 +1,37 @@
 (function(window){ 'use strict';
 	if(!window.angular){
 		throw 'angular not loaded';
-		return;
 	}
 	
 	if(!window.SS){
 		throw 'sacrificial socket not loaded';
-		return;
 	}
 	
 	window.angular.module('sacrificial-socket', [])
-		.factory('ss', ['$window', '$rootScope', '$log', function($window, $rootScope, $log){
+		.factory('ss', ['$window', '$rootScope', function($window, $rootScope){
 			function SSNG(url, opts){
 				var self = this,
 					socket = new $window.SS(url, opts);
-					
-				self.onConnect = function(callback){
-					callback = callback || socket.noop;
-					socket.onConnect(function(){
+				
+				var scopeCB = function(cb){
+					return function(){
 						var args = arguments;
 						$rootScope.$apply(function(){
-							callback.apply(self, args);
-						})
-					});
+							cb.apply(self, args);
+						});
+					};
+				};
+				
+				self.onConnect = function(callback){
+					socket.onConnect(scopeCB(callback));
 				};
 				
 				self.onDisconnect = function(callback){
-					callback = callback || socket.noop;
-					socket.onDisconnect(function(){
-						var args = arguments;
-						$rootScope.$apply(function(){
-							callback.apply(self, args);
-						});
-					});
+					socket.onDisconnect(scopeCB(callback));
 				};
 				
 				self.on = function(eventName, callback){
-					callback = callback || socket.noop;
-					socket.on(eventName, function(){
-						var args = arguments;
-						$rootScope.$apply(function(){
-							callback.apply(self, args);
-						});
-					});
+					socket.on(eventName, scopeCB(callback));
 				};
 				
 				self.off = function(eventName){
