@@ -1,3 +1,4 @@
+//Package log is a robust logging system that provides a standard logger, an ANSI color logger, and a json logger that all make use of log levels
 package log
 
 import (
