@@ -11,16 +11,15 @@
 		.factory('ss', ['$window', '$rootScope', function($window, $rootScope){
 			function SSNG(url, opts){
 				var self = this,
-					socket = new $window.SS(url, opts);
-				
-				var scopeCB = function(cb){
-					return function(){
-						var args = arguments;
-						$rootScope.$apply(function(){
-							cb.apply(self, args);
-						});
+					socket = new $window.SS(url, opts),
+					scopeCB = function(cb){
+						return function(){
+							var args = arguments;
+							$rootScope.$apply(function(){
+								cb.apply(self, args);
+							});
+						};
 					};
-				};
 				
 				self.onConnect = function(callback){
 					socket.onConnect(scopeCB(callback));

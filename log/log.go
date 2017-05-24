@@ -5,11 +5,13 @@ import (
 )
 
 const (
+	//Base log levels
 	LogLevelINFO = 1 << iota
 	LogLevelWARN
 	LogLevelERR
 	LogLevelDEBUG
 
+	//Common log level combinations
 	LogLevelNone = 0
 	LogLevelStd  = LogLevelINFO | LogLevelWARN | LogLevelERR
 	LogLevelWarn = LogLevelWARN | LogLevelERR
@@ -33,9 +35,10 @@ var (
 	}
 )
 
-//this is pretty much the only thing that isn't
-//safe to run in multiple go routines, you should
-//call SetDefaultLogger at the beginning of your main function
+//SetDefaultLogger sets the default logger... Yeah really.
+//This is pretty much the only thing that isn't safe to run
+//in multiple go routines. You should call SetDefaultLogger
+//in your init or at the beginning of your main function.
 func SetDefaultLogger(l *Logger) {
 	defaultLogger = l
 	Info = defaultLogger.Info
@@ -44,6 +47,7 @@ func SetDefaultLogger(l *Logger) {
 	Debug = defaultLogger.Debug
 }
 
+//LogFormatter is the interface containing all the print methods needed for a typical Logger.
 type LogFormatter interface {
 	Fatal(v ...interface{})
 	Fatalf(format string, v ...interface{})
@@ -54,6 +58,7 @@ type LogFormatter interface {
 	Println(v ...interface{})
 }
 
+//Logger is a struct containing a LogFormatter for each of the four basic log levels.
 type Logger struct {
 	Info  LogFormatter
 	Warn  LogFormatter

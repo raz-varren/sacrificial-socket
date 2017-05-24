@@ -41,10 +41,12 @@ var (
 	}
 )
 
+//NewColorLogger creates a new *Logger that outputs different log levels as different ANSI colors
 func NewColorLogger(out io.Writer, logLevel int) *Logger {
 	return newLogger(out, logLevel, true)
 }
 
+//NewLogger creates a new *Logger without ANSI colors
 func NewLogger(out io.Writer, logLevel int) *Logger {
 	return newLogger(out, logLevel, false)
 }
@@ -119,8 +121,8 @@ func (lf *colorLogFmt) doPrint(pType, format string, v ...interface{}) {
 	}
 }
 
-//Fatal logs don't care what the logLevel is. They print
-//and exit with a satus of 1
+//Fatal logs don't care what the logLevel is. They print using the
+//LogLevelERR color (if using the color logger) and exit with a satus of 1
 func (lf *colorLogFmt) Fatal(v ...interface{}) {
 	lf.doPrint("Fatal", "", v...)
 }
@@ -133,14 +135,17 @@ func (lf *colorLogFmt) Fatalln(v ...interface{}) {
 	lf.doPrint("Fatalln", "", v...)
 }
 
+//Print operates the same as fmt.Print but with a log prefix
 func (lf *colorLogFmt) Print(v ...interface{}) {
 	lf.doPrint("Print", "", v...)
 }
 
+//Printf operates the same as fmt.Printf but with a log prefix
 func (lf *colorLogFmt) Printf(format string, v ...interface{}) {
 	lf.doPrint("Printf", format, v...)
 }
 
+//Println operates the same as fmt.Println but with a log prefix
 func (lf *colorLogFmt) Println(v ...interface{}) {
 	lf.doPrint("Println", "", v...)
 }

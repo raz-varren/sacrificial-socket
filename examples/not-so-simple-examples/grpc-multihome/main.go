@@ -8,7 +8,7 @@ import (
 	"flag"
 	"github.com/raz-varren/sacrificial-socket"
 	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc"
-	"log"
+	"github.com/raz-varren/sacrificial-socket/log"
 	"net/http"
 	"os"
 	"strings"
@@ -37,6 +37,8 @@ var (
 func main() {
 	flag.Parse()
 
+	log.SetDefaultLogger(log.NewLogger(os.Stdout, log.LogLevelDbg))
+
 	s := ss.NewServer()
 
 	s.On("echo", Echo)
@@ -52,7 +54,7 @@ func main() {
 	s.On("broadcastjson", BroadcastJSON)
 
 	if *peerList == "" {
-		log.Println("must provide peers to connect to")
+		log.Err.Println("must provide peers to connect to")
 		flag.PrintDefaults()
 		return
 	}
@@ -88,7 +90,7 @@ func main() {
 	}
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Err.Fatalln(err)
 	}
 }
 
@@ -162,6 +164,6 @@ func BroadcastJSON(s *ss.Socket, data []byte) {
 
 func check(err error) {
 	if err != nil {
-		log.Println(err)
+		log.Err.Println(err)
 	}
 }

@@ -10,7 +10,8 @@ import (
 	"time"
 )
 
-type jLog struct {
+//JLog is the json structure used to output logs created by NewJSONLogger
+type JLog struct {
 	Timestamp time.Time `json:"ts"`
 	File      string    `json:"file"`
 	Line      int       `json:"line"`
@@ -19,7 +20,7 @@ type jLog struct {
 	Msg       string    `json:"msg"`
 }
 
-func (jl *jLog) Marshal() []byte {
+func (jl *JLog) Marshal() []byte {
 	data, err := json.Marshal(jl)
 	if err != nil {
 		return []byte(fmt.Sprintf(`{"Error":"%s", "Line": %d, "File":"%s"}`, err, jl.Line, jl.File))
@@ -43,8 +44,8 @@ func (j *jsonLogFmt) writeJLog(msg string, fatal bool) {
 	j.out.Write(append(data, '\n'))
 }
 
-func newJLog(msg, level string, fatal bool, callDepth int) *jLog {
-	jl := &jLog{
+func newJLog(msg, level string, fatal bool, callDepth int) *JLog {
+	jl := &JLog{
 		Timestamp: time.Now(),
 		Level:     level,
 		Fatal:     fatal,
@@ -118,6 +119,7 @@ func (j *jsonLogFmt) Fatalln(v ...interface{}) {
 	os.Exit(1)
 }
 
+//NewJSONLogger creates a *Logger that outputs a single json object for each log in the marshaled format of JLog.
 func NewJSONLogger(out io.Writer, logLevel int) *Logger {
 	info := &jsonLogFmt{
 		out:             out,

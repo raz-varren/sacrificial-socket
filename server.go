@@ -145,7 +145,7 @@ func (serv *SocketServer) Broadcast(eventName string, data interface{}) {
 //reading frames and dispatching events
 func (serv *SocketServer) loop(ws *websocket.Conn) {
 	s := newSocket(serv, ws)
-	log.Info.Println(s.ID(), "connected")
+	log.Debug.Println(s.ID(), "connected")
 	defer s.Close()
 
 	serv.l.RLock()

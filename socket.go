@@ -182,7 +182,7 @@ func (s *Socket) Close() {
 		return
 	}
 
-	defer log.Info.Println(s.ID(), "disconnected")
+	defer log.Debug.Println(s.ID(), "disconnected")
 
 	err := s.ws.Close()
 	if err != nil {

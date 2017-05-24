@@ -6,7 +6,7 @@ package main
 import (
 	"encoding/json"
 	ss "github.com/raz-varren/sacrificial-socket"
-	"log"
+	"github.com/raz-varren/sacrificial-socket/log"
 	"net/http"
 )
 
@@ -19,7 +19,7 @@ func main() {
 	http.Handle("/socket", s.WebHandler())
 	http.Handle("/", http.FileServer(http.Dir("webroot")))
 
-	log.Fatalln(http.ListenAndServe(":80", nil))
+	log.Err.Fatalln(http.ListenAndServe(":80", nil))
 }
 
 func join(s *ss.Socket, data []byte) {

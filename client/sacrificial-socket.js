@@ -30,6 +30,9 @@
 			dataStartChar       = String.fromCharCode(dataStartCharCode),
 			ws                  = new WebSocket(url, 'sac-sock');
 		
+		//blomp blomp-a noop noop a-noop noop noop
+		self.noop = function(){ };
+		
 		//we really only support reconnect options for now
 		if(typeof opts.reconnectOpts == 'object'){
 			for(var i in opts.reconnectOpts){
@@ -37,8 +40,6 @@
 				reconnectOpts[i] = opts.reconnectOpts[i];
 			}
 		}
-		
-		self.noop = function(){ };
 		
 		//sorry, only supporting arraybuffer at this time
 		//maybe if there is demand for it, I'll add Blob support
