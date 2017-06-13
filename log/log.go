@@ -34,6 +34,14 @@ var (
 		LogLevelERR:   "ERROR",
 		LogLevelDEBUG: "DEBUG",
 	}
+
+	LogLevelNames = map[string]int{
+		"none":     LogLevelNone,
+		"standard": LogLevelStd,
+		"warn":     LogLevelWarn,
+		"error":    LogLevelErr,
+		"debug":    LogLevelDbg,
+	}
 )
 
 //SetDefaultLogger sets the default logger... Yeah really.
