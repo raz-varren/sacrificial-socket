@@ -39,7 +39,9 @@ type MMHB struct {
 //pollFrequency is used to determine how frequently MongoDB is queried for broadcasts or roomcasts
 func NewBackend(mongoURL, serverName, serverGroup string, pollFrequency time.Duration) *MMHB {
 	m, err := mgo.Dial(mongoURL)
-	log.CheckFatal(err)
+	if err != nil {
+		log.Err.Fatalln(err)
+	}
 	db := m.DB("SSMultihome")
 
 	s := backendServer{
