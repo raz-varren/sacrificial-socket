@@ -26,7 +26,7 @@ type MMHB struct {
 	l             *sync.RWMutex
 }
 
-//NewMongoDBBackend returns a new instance of MMHB which satisfies the ss.MultihomeBackend interface.
+//NewBackend returns a new instance of MMHB which satisfies the ss.MultihomeBackend interface.
 //A new database "SSMultihome" will be created at the specified mongoURL, and under it 3 collections "ss.activeServers",
 //"ss.roomcasts", and "ss.broadcasts" will be created if they don't already exist.
 //
