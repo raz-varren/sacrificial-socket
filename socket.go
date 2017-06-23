@@ -46,7 +46,7 @@ var (
 		"#", ".",
 	}
 
-	idCharLen int = len(idChars) - 1
+	idCharLen = len(idChars) - 1
 )
 
 func newSocket(serv *SocketServer, ws *websocket.Conn) *Socket {
@@ -89,7 +89,7 @@ func (s *Socket) GetRooms() []string {
 	defer s.roomsl.RUnlock()
 
 	var roomList []string
-	for room, _ := range s.rooms {
+	for room := range s.rooms {
 		roomList = append(roomList, room)
 	}
 	return roomList

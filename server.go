@@ -22,7 +22,8 @@ const ( //                        ASCII chars
 	startOfHeaderByte uint8 = 1 //SOH
 	startOfDataByte         = 2 //STX
 
-	SupportedSubProtocol string = "sac-sock"
+	//The official sacrificial-socket sub protocol
+	SubProtocol string = "sac-sock"
 )
 
 type event struct {
@@ -194,7 +195,7 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 
 func protocolSupported(conf *websocket.Config) bool {
 	for _, p := range conf.Protocol {
-		if p == SupportedSubProtocol {
+		if p == SubProtocol {
 			return true
 		}
 	}
