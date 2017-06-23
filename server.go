@@ -22,7 +22,7 @@ const ( //                        ASCII chars
 	startOfHeaderByte uint8 = 1 //SOH
 	startOfDataByte         = 2 //STX
 
-	//The official sacrificial-socket sub protocol
+	//SubProtocol is the official sacrificial-socket sub protocol
 	SubProtocol string = "sac-sock"
 )
 
