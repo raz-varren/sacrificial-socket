@@ -1,0 +1,15 @@
+{
+    "name": "sacrificial-socket",
+    "version": "1.1.2",
+    "description": "Client javascript for use with the Sacrificial-Socket service",
+    "keywords": [
+        "websocket",
+        "client-side"
+    ],
+    "homepage": "https://github.com/raz-varren/sacrificial-socket",
+    "license": "MIT",
+    "files": [
+        "sacrificial-socket.js",
+        "ng-ss.js"
+    ]
+}
