@@ -6,10 +6,27 @@
         "websocket",
         "client-side"
     ],
+    "main": "dist/sacrifical-socket.js",
+    "scripts": {
+        "prebuild": "rimraf dist",
+        "build": "webpack",
+        "prepublish": "npm run build"
+    },
     "homepage": "https://github.com/raz-varren/sacrificial-socket",
     "license": "MIT",
     "files": [
-        "sacrificial-socket.js",
-        "ng-ss.js"
-    ]
+        "dist/"
+    ],
+    "devDependencies": {
+        "babel-cli": "^6.24.1",
+        "babel-loader": "^7.1.1",
+        "babel-preset-env": "^1.6.0",
+        "rimraf": "^2.6.1",
+        "webpack": "^3.0.0"
+    },
+    "babel": {
+        "presets": [
+            "env"
+        ]
+    }
 }
