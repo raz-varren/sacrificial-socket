@@ -1,1 +1,3 @@
 /client/README.md
+node_modules
+/client/dist
