@@ -1,4 +1,10 @@
-(function(window){ 'use strict';
+if(typeof window === 'undefined'){
+	var window = {};
+}
+if(typeof module === 'undefined'){
+	var module = {};
+}
+(function(window, module){ 'use strict';
 	/**
 	* SS is the constructor for the sacrificial-socket client
 	*
@@ -239,4 +245,5 @@
 	};
 	
 	window.SS = SS;
-})(window);
+	module.exports = SS;
+})(window, module);
