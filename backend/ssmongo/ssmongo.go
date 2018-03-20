@@ -6,7 +6,7 @@ package ssmongo
 import (
 	"encoding/json"
 	ss "github.com/raz-varren/sacrificial-socket"
-	"github.com/raz-varren/sacrificial-socket/log"
+	"github.com/raz-varren/log"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"io"

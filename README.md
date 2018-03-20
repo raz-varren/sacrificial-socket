@@ -1,4 +1,4 @@
-Sacrificial-Socket
+Sacrificial-Socket [![GoDoc](https://godoc.org/github.com/raz-varren/sacrificial-socket?status.svg)](https://godoc.org/github.com/raz-varren/sacrificial-socket)
 ==================
 
 A Go server library and pure JS client library for managing communication between websockets, that has an API similar to Socket.IO, but feels less... well, *Javascripty*. Socket.IO is great, but nowadays all modern browsers support websockets natively, so in most cases there is no need to have websocket simulation fallbacks like XHR long polling or Flash. Removing these allows Sacrificial-Socket to be lightweight and very performant.
@@ -7,7 +7,7 @@ Sacrificial-Socket supports rooms, roomcasts, broadcasts, and event emitting jus
 
 Sacrificial-Socket also has a MultihomeBackend interface for syncronizing broadcasts and roomcasts across multiple instances of Sacrificial-Socket running on multiple machines. Out of the box Sacrificial-Socket provides a MultihomeBackend interface for the popular noSQL database MongoDB, one for the moderately popular key/value storage engine Redis, and one for the not so popular GRPC protocol, for syncronizing instances on multiple machines.
 
-In depth examples can be found in the [__examples__ ](https://github.com/raz-varren/sacrificial-socket/tree/master/examples "Examples") directory and full documentation can be found here: [![GoDoc](https://godoc.org/github.com/raz-varren/sacrificial-socket?status.svg)](https://godoc.org/github.com/raz-varren/sacrificial-socket)
+In depth examples can be found in the [__examples__ ](https://github.com/raz-varren/sacrificial-socket/tree/master/examples "Examples") directory.
 
 Usage
 -----

@@ -3,7 +3,7 @@ package ss
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/raz-varren/sacrificial-socket/log"
+	"github.com/raz-varren/log"
 	"github.com/raz-varren/sacrificial-socket/tools"
 	"golang.org/x/net/websocket"
 	"sync"

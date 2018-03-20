@@ -6,7 +6,7 @@ package ssredis
 import (
 	"github.com/go-redis/redis"
 	ss "github.com/raz-varren/sacrificial-socket"
-	"github.com/raz-varren/sacrificial-socket/log"
+	"github.com/raz-varren/log"
 	"github.com/raz-varren/sacrificial-socket/tools"
 )
 

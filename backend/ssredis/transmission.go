@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"github.com/raz-varren/sacrificial-socket/log"
+	"github.com/raz-varren/log"
 )
 
 const (
