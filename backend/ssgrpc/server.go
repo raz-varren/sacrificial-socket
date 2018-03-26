@@ -36,7 +36,7 @@ func (p *propagateServer) checkCreds(ctx context.Context) error {
 		return nil
 	}
 
-	meta, ok := metadata.FromContext(ctx)
+	meta, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return ErrBadContext
 	}
