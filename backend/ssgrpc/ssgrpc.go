@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 	ss "github.com/raz-varren/sacrificial-socket"
 	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc/transport"
-	"github.com/raz-varren/sacrificial-socket/log"
+	"github.com/raz-varren/log"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

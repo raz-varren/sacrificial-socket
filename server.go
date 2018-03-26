@@ -8,7 +8,7 @@ Sacrificial-Socket also has a MultihomeBackend interface for syncronizing broadc
 package ss
 
 import (
-	"github.com/raz-varren/sacrificial-socket/log"
+	"github.com/raz-varren/log"
 	"golang.org/x/net/websocket"
 	"io"
 	"net/http"
