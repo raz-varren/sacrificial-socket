@@ -47,7 +47,7 @@ func main() {
     s := ss.NewServer()
     s.On("echo", doEcho)
     
-    http.Handle("/socket", s.WebHandler())
+    http.Handle("/socket", s)
     http.ListenAndServe(":8080", nil);
 }
 ```

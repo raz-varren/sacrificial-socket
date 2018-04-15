@@ -16,7 +16,7 @@ func main() {
 	s.On("join", join)
 	s.On("message", message)
 
-	http.Handle("/socket", s.WebHandler())
+	http.Handle("/socket", s)
 	http.Handle("/", http.FileServer(http.Dir("webroot")))
 
 	log.Err.Fatalln(http.ListenAndServe(":80", nil))
