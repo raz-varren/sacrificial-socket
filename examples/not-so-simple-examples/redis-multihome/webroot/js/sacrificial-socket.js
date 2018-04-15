@@ -34,7 +34,8 @@ if(typeof module === 'undefined'){
 			headerStartChar     = String.fromCharCode(headerStartCharCode),
 			dataStartCharCode   = 2,
 			dataStartChar       = String.fromCharCode(dataStartCharCode),
-			ws                  = new WebSocket(url, 'sac-sock');
+			subProtocol         = 'sac-sock',
+			ws                  = new WebSocket(url, subProtocol);
 		
 		//blomp blomp-a noop noop a-noop noop noop
 		self.noop = function(){ };
@@ -112,7 +113,7 @@ if(typeof module === 'undefined'){
 		function startReconnect(){
 			setTimeout(function(){
 				console.log('attempting reconnect');
-				var newWS = new WebSocket(url, 'sac-sock');
+				var newWS = new WebSocket(url, subProtocol);
 				newWS.onmessage = ws.onmessage;
 				newWS.onclose = ws.onclose;
 				newWS.binaryType = ws.binaryType;
@@ -240,7 +241,7 @@ if(typeof module === 'undefined'){
 		*/
 		self.close = function(){
 			reconnectOpts.enabled = false; //don't reconnect if close is called
-			return ws.close();
+			return ws.close(1000);
 		};
 	};
 	

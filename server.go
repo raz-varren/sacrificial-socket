@@ -8,12 +8,13 @@ Sacrificial-Socket also has a MultihomeBackend interface for syncronizing broadc
 package ss
 
 import (
+	"github.com/gorilla/websocket"
 	"github.com/raz-varren/log"
-	"golang.org/x/net/websocket"
 	"io"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 )
@@ -39,14 +40,16 @@ type SocketServer struct {
 	onConnectFunc    func(*Socket)
 	onDisconnectFunc func(*Socket)
 	l                *sync.RWMutex
+	upgrader         *websocket.Upgrader
 }
 
 //NewServer creates a new instance of SocketServer
 func NewServer() *SocketServer {
 	s := &SocketServer{
-		hub:    newHub(),
-		events: make(map[string]*event),
-		l:      &sync.RWMutex{},
+		hub:      newHub(),
+		events:   make(map[string]*event),
+		l:        &sync.RWMutex{},
+		upgrader: DefaultUpgrader(),
 	}
 
 	return s
@@ -115,16 +118,35 @@ func (serv *SocketServer) OnDisconnect(handleFunc func(*Socket)) {
 }
 
 //WebHandler returns a http.Handler to be passed into http.Handle
+//
+//Depricated: The SocketServer struct now satisfies the http.Handler interface, use that instead
 func (serv *SocketServer) WebHandler() http.Handler {
-	return websocket.Server{
-		Handshake: func(c *websocket.Config, r *http.Request) error {
-			if !protocolSupported(c) {
-				return websocket.ErrBadWebSocketProtocol
-			}
-			return nil
-		},
-		Handler: serv.loop,
+	return serv
+}
+
+//ServeHTTP will upgrade a http request to a websocket using the sac-sock subprotocol
+func (serv *SocketServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	ws, err := serv.upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Err.Println(err)
+		return
 	}
+
+	serv.loop(ws)
+}
+
+//DefaultUpgrader returns a websocket upgrader suitable for creating sacrificial-socket websockets.
+func DefaultUpgrader() *websocket.Upgrader {
+	u := &websocket.Upgrader{
+		Subprotocols: []string{SubProtocol},
+	}
+
+	return u
+}
+
+//SetUpgrader sets the websocket.Upgrader used by the SocketServer.
+func (serv *SocketServer) SetUpgrader(u *websocket.Upgrader) {
+	serv.upgrader = u
 }
 
 //SetMultihomeBackend registers a MultihomeBackend interface and calls it's Init() method
@@ -147,6 +169,7 @@ func (serv *SocketServer) Broadcast(eventName string, data interface{}) {
 func (serv *SocketServer) loop(ws *websocket.Conn) {
 	s := newSocket(serv, ws)
 	log.Debug.Println(s.ID(), "connected")
+
 	defer s.Close()
 
 	serv.l.RLock()
@@ -158,10 +181,8 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 	}
 
 	for {
-		var msg []byte
-
-		err := s.receive(&msg)
-		if err == io.EOF {
+		msg, err := s.receive()
+		if ignorableError(err) {
 			return
 		}
 		if err != nil {
@@ -180,7 +201,8 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 			}
 		}
 		if eventName == "" {
-			continue //no event to dispatch
+			log.Warn.Println("no event to dispatch")
+			continue
 		}
 
 		serv.l.RLock()
@@ -193,11 +215,11 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 	}
 }
 
-func protocolSupported(conf *websocket.Config) bool {
-	for _, p := range conf.Protocol {
-		if p == SubProtocol {
-			return true
-		}
+func ignorableError(err error) bool {
+	//not an error
+	if err == nil {
+		return false
 	}
-	return false
+
+	return err == io.EOF || websocket.IsCloseError(err, 1000) || websocket.IsCloseError(err, 1001) || strings.HasSuffix(err.Error(), "use of closed network connection")
 }

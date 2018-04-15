@@ -2,11 +2,17 @@ package ss
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
+	"github.com/gorilla/websocket"
 	"github.com/raz-varren/log"
-	"github.com/raz-varren/sacrificial-socket/tools"
-	"golang.org/x/net/websocket"
+	"math/rand"
 	"sync"
+	"time"
+)
+
+var (
+	socketRNG = newRNG()
 )
 
 //Socket represents a websocket connection
@@ -21,42 +27,17 @@ type Socket struct {
 }
 
 const (
-	idLen int = 32
+	idLen int = 24
 
 	typeJSON string = "J"
 	typeBin         = "B"
 	typeStr         = "S"
 )
 
-var (
-	idChars = []string{
-		"0", "1", "2", "3", "4",
-		"5", "6", "7", "8", "9",
-		"A", "B", "C", "D", "E",
-		"F", "G", "H", "I", "J",
-		"K", "L", "M", "N", "O",
-		"P", "Q", "R", "S", "T",
-		"U", "V", "W", "X", "Y",
-		"Z", "a", "b", "c", "d",
-		"e", "f", "g", "h", "i",
-		"j", "k", "l", "m", "n",
-		"o", "p", "q", "r", "s",
-		"t", "u", "v", "w", "x",
-		"y", "z", "=", "_", "-",
-		"#", ".",
-	}
-
-	idCharLen = len(idChars) - 1
-)
-
 func newSocket(serv *SocketServer, ws *websocket.Conn) *Socket {
-	buf := bytes.NewBuffer(nil)
-	for i := 0; i < idLen; i++ {
-		buf.WriteString(idChars[tools.RandomInt(0, idCharLen)])
-	}
 	s := &Socket{
 		l:      &sync.RWMutex{},
-		id:     buf.String(),
+		id:     newSocketID(),
 		ws:     ws,
 		closed: false,
 		serv:   serv,
@@ -67,12 +48,21 @@ func newSocket(serv *SocketServer, ws *websocket.Conn) *Socket {
 	return s
 }
 
-func (s *Socket) receive(v interface{}) error {
-	return websocket.Message.Receive(s.ws, v)
+func newSocketID() string {
+	idBuf := make([]byte, idLen)
+	socketRNG.Read(idBuf)
+	return base64.StdEncoding.EncodeToString(idBuf)
 }
 
-func (s *Socket) send(data interface{}) error {
-	return websocket.Message.Send(s.ws, data)
+func (s *Socket) receive() ([]byte, error) {
+	_, data, err := s.ws.ReadMessage()
+	return data, err
+}
+
+func (s *Socket) send(msgType int, data []byte) error {
+	s.l.Lock()
+	defer s.l.Unlock()
+	return s.ws.WriteMessage(msgType, data)
 }
 
 //InRoom returns true if s is currently a member of roomName
@@ -126,20 +116,18 @@ func (s *Socket) Broadcast(eventName string, data interface{}) {
 
 //Emit dispatches an event to s.
 func (s *Socket) Emit(eventName string, data interface{}) error {
-	return s.send(emitData(eventName, data))
+	d, msgType := emitData(eventName, data)
+	return s.send(msgType, d)
 }
 
 //ID returns the unique ID of s
 func (s *Socket) ID() string {
-	s.l.RLock()
-	defer s.l.RUnlock()
-	id := s.id
-	return id
+	return s.id
 }
 
 //emitData combines the eventName and data into a payload that is understood
-//by the sac-sock protocol. It will return either a string or a []byte
-func emitData(eventName string, data interface{}) interface{} {
+//by the sac-sock protocol.
+func emitData(eventName string, data interface{}) ([]byte, int) {
 	buf := bytes.NewBuffer(nil)
 	buf.WriteString(eventName)
 	buf.WriteByte(startOfHeaderByte)
@@ -149,13 +137,13 @@ func emitData(eventName string, data interface{}) interface{} {
 		buf.WriteString(typeStr)
 		buf.WriteByte(startOfDataByte)
 		buf.WriteString(d)
-		return buf.String()
+		return buf.Bytes(), websocket.TextMessage
 
 	case []byte:
 		buf.WriteString(typeBin)
 		buf.WriteByte(startOfDataByte)
 		buf.Write(d)
-		return buf.Bytes()
+		return buf.Bytes(), websocket.BinaryMessage
 
 	default:
 		buf.WriteString(typeJSON)
@@ -166,7 +154,7 @@ func emitData(eventName string, data interface{}) interface{} {
 		} else {
 			buf.Write(jsonData)
 		}
-		return buf.String()
+		return buf.Bytes(), websocket.TextMessage
 	}
 }
 
@@ -184,10 +172,7 @@ func (s *Socket) Close() {
 
 	defer log.Debug.Println(s.ID(), "disconnected")
 
-	err := s.ws.Close()
-	if err != nil {
-		log.Err.Println(err)
-	}
+	s.ws.Close()
 
 	rooms := s.GetRooms()
 
@@ -204,4 +189,22 @@ func (s *Socket) Close() {
 	}
 
 	s.serv.hub.removeSocket(s)
+}
+
+type rng struct {
+	r  *rand.Rand
+	mu *sync.Mutex
+}
+
+func (r *rng) Read(b []byte) (int, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	return r.r.Read(b)
+}
+
+func newRNG() *rng {
+	return &rng{
+		r:  rand.New(rand.NewSource(time.Now().UnixNano())),
+		mu: &sync.Mutex{},
+	}
 }
