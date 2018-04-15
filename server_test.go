@@ -24,7 +24,7 @@ func ExampleNewServer() {
 		os.Exit(0)
 	}()
 
-	http.Handle("/socket", s.WebHandler())
+	http.Handle("/socket", s)
 	log.Fatalln(http.ListenAndServe(":8080", nil))
 }
 
