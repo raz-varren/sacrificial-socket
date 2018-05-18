@@ -12,7 +12,7 @@ type RNG struct {
 	mu *sync.Mutex
 }
 
-//Read reads len(b) random bytes into b and never returns a nil error
+//Read reads len(b) random bytes into b and always returns a nil error
 func (r *RNG) Read(b []byte) (int, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
