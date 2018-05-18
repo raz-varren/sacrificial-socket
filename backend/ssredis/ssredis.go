@@ -4,13 +4,13 @@ Package ssredis provides a ss.MultihomeBackend interface that uses Redis for syn
 package ssredis
 
 import (
-	"github.com/go-redis/redis"
-	ss "github.com/raz-varren/sacrificial-socket"
-	"github.com/raz-varren/log"
 	"encoding/hex"
+	"github.com/go-redis/redis"
+	"github.com/raz-varren/log"
+	ss "github.com/raz-varren/sacrificial-socket"
 )
 
-var(
+var (
 	rng = ss.NewRNG()
 )
 

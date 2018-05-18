@@ -97,7 +97,7 @@ func (serv *SocketServer) Shutdown() bool {
 }
 
 //EventHandler is an interface for registering events using SockerServer.OnEvent
-type EventHandler interface{
+type EventHandler interface {
 	HandleEvent(*Socket, []byte)
 	EventName() string
 }
@@ -111,9 +111,9 @@ func (serv *SocketServer) On(eventName string, handleFunc func(*Socket, []byte))
 	serv.events[eventName] = &event{eventName, handleFunc} //you think you can handle the func?
 }
 
-//OnEvent has the same functionality as On, but accepts 
+//OnEvent has the same functionality as On, but accepts
 //an EventHandler interface instead of a handler function.
-func (serv *SocketServer) OnEvent(h EventHandler){
+func (serv *SocketServer) OnEvent(h EventHandler) {
 	serv.On(h.EventName(), h.HandleEvent)
 }
 

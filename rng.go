@@ -1,6 +1,6 @@
 package ss
 
-import(
+import (
 	"math/rand"
 	"sync"
 	"time"

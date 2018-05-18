@@ -7,9 +7,9 @@ import (
 	"encoding/json"
 	"flag"
 	"github.com/go-redis/redis"
+	"github.com/raz-varren/log"
 	"github.com/raz-varren/sacrificial-socket"
 	"github.com/raz-varren/sacrificial-socket/backend/ssredis"
-	"github.com/raz-varren/log"
 	"net/http"
 	"os"
 )

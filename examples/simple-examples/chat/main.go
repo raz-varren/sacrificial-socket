@@ -5,8 +5,8 @@ package main
 
 import (
 	"encoding/json"
-	ss "github.com/raz-varren/sacrificial-socket"
 	"github.com/raz-varren/log"
+	ss "github.com/raz-varren/sacrificial-socket"
 	"net/http"
 )
 

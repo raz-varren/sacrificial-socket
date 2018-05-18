@@ -5,9 +5,9 @@ package ssgrpc
 
 import (
 	"encoding/json"
+	"github.com/raz-varren/log"
 	ss "github.com/raz-varren/sacrificial-socket"
 	"github.com/raz-varren/sacrificial-socket/backend/ssgrpc/transport"
-	"github.com/raz-varren/log"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

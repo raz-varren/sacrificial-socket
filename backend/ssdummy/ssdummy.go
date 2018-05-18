@@ -2,8 +2,8 @@
 package ssdummy
 
 import (
-	ss "github.com/raz-varren/sacrificial-socket"
 	"github.com/raz-varren/log"
+	ss "github.com/raz-varren/sacrificial-socket"
 	"time"
 )
 
