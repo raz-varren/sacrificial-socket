@@ -96,6 +96,12 @@ func (serv *SocketServer) Shutdown() bool {
 	return true
 }
 
+//EventHandler is an interface for registering events using SockerServer.OnEvent
+type EventHandler interface{
+	HandleEvent(*Socket, []byte)
+	EventName() string
+}
+
 //On registers event functions to be called on individual Socket connections
 //when the server's socket receives an Emit from the client's socket.
 //
@@ -103,6 +109,12 @@ func (serv *SocketServer) Shutdown() bool {
 //go routines
 func (serv *SocketServer) On(eventName string, handleFunc func(*Socket, []byte)) {
 	serv.events[eventName] = &event{eventName, handleFunc} //you think you can handle the func?
+}
+
+//OnEvent has the same functionality as On, but accepts 
+//an EventHandler interface instead of a handler function.
+func (serv *SocketServer) OnEvent(h EventHandler){
+	serv.On(h.EventName(), h.HandleEvent)
 }
 
 //OnConnect registers an event function to be called whenever a new Socket connection
