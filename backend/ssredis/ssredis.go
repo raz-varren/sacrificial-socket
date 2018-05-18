@@ -7,7 +7,11 @@ import (
 	"github.com/go-redis/redis"
 	ss "github.com/raz-varren/sacrificial-socket"
 	"github.com/raz-varren/log"
-	"github.com/raz-varren/sacrificial-socket/tools"
+	"encoding/hex"
+)
+
+var(
+	rng = ss.NewRNG()
 )
 
 const (
@@ -60,7 +64,9 @@ func NewBackend(rOpts *redis.Options, ssrOpts *Options) (*RMHB, error) {
 	}
 
 	if ssrOpts.ServerName == "" {
-		ssrOpts.ServerName = tools.UID()
+		uid := make([]byte, 16)
+		rng.Read(uid)
+		ssrOpts.ServerName = hex.EncodeToString(uid)
 	}
 
 	roomPSName := ssrOpts.ServerGroup + ":_ss_roomcasts"

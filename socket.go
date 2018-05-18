@@ -6,13 +6,11 @@ import (
 	"encoding/json"
 	"github.com/gorilla/websocket"
 	"github.com/raz-varren/log"
-	"math/rand"
 	"sync"
-	"time"
 )
 
 var (
-	socketRNG = newRNG()
+	socketRNG = NewRNG()
 )
 
 //Socket represents a websocket connection
@@ -189,22 +187,4 @@ func (s *Socket) Close() {
 	}
 
 	s.serv.hub.removeSocket(s)
-}
-
-type rng struct {
-	r  *rand.Rand
-	mu *sync.Mutex
-}
-
-func (r *rng) Read(b []byte) (int, error) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	return r.r.Read(b)
-}
-
-func newRNG() *rng {
-	return &rng{
-		r:  rand.New(rand.NewSource(time.Now().UnixNano())),
-		mu: &sync.Mutex{},
-	}
 }
