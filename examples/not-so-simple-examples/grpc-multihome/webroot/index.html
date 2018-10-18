@@ -15,17 +15,32 @@
 			<div id="controls">
 				<div class="control-block">
 					<label for="in-echo">Echo:</label>
-					<input type="text" id="in-echo" class="form-control" />
+					<input type="text" id="in-echo" class="form-control" /><br />
 					<div class="btn-group btn-group-justified">
 						<a href="javascript:void(0);" id="btn-echo" class="btn btn-default ctrl-btn">Echo</a>
 						<a href="javascript:void(0);" id="btn-echo-bin" class="btn btn-default ctrl-btn">Echo Binary</a>
 						<a href="javascript:void(0);" id="btn-echo-json" class="btn btn-default ctrl-btn">Echo JSON</a>
 					</div>
 				</div>
+
+				<div class="control-block">
+					<label for="in-socketcast-socket">Socketcast:</label>
+					<div class="well well-sm">
+						<label for="in-socketcast-socket">Socket ID:</label>
+						<input type="text" id="in-socketcast-socket" class="form-control" />
+						<label for="in-socketcast-data">Socketcast Data:</label>
+						<input type="text" id="in-socketcast-data" class="form-control" /><br />
+						<div class="btn-group btn-group-justified">
+							<a href="javascript:void(0);" id="btn-socketcast" class="btn btn-default ctrl-btn">Socketcast</a>
+							<a href="javascript:void(0);" id="btn-socketcast-bin" class="btn btn-default ctrl-btn">Cast Binary</a>
+							<a href="javascript:void(0);" id="btn-socketcast-json" class="btn btn-default ctrl-btn">Cast JSON</a>
+						</div>
+					</div>
+				</div>
 				
 				<div class="control-block">
 					<label for="in-broadcast">Broadcast:</label>
-					<input type="text" id="in-broadcast" class="form-control" />
+					<input type="text" id="in-broadcast" class="form-control" /><br />
 					<div class="btn-group btn-group-justified">
 						<a href="javascript:void(0);" id="btn-broadcast" class="btn btn-default ctrl-btn">Broadcast</a>
 						<a href="javascript:void(0);" id="btn-broadcast-bin" class="btn btn-default ctrl-btn">Broadcast Binary</a>
@@ -56,8 +71,8 @@
 				<div class="control-block well well-sm">
 					<label for="in-roomcast-room">Room:</label>
 					<input type="text" id="in-roomcast-room" class="form-control" />
-					<label for="in-roomcast-data">Roomcast:</label>
-					<input type="text" id="in-roomcast-data" class="form-control" />
+					<label for="in-roomcast-data">Roomcast Data:</label>
+					<input type="text" id="in-roomcast-data" class="form-control" /><br />
 					<div class="btn-group btn-group-justified">
 						<a href="javascript:void(0);" id="btn-roomcast" class="btn btn-default ctrl-btn">Roomcast</a>
 						<a href="javascript:void(0);" id="btn-roomcast-bin" class="btn btn-default ctrl-btn">Roomcast Binary</a>

@@ -176,6 +176,11 @@ func (serv *SocketServer) Broadcast(eventName string, data interface{}) {
 	serv.hub.broadcast(&BroadcastMsg{eventName, data})
 }
 
+//Socketcast dispatches an event to the specified socket ID.
+func (serv *SocketServer) Socketcast(socketID, eventName string, data interface{}) {
+	serv.Roomcast("__socket_id:"+socketID, eventName, data)
+}
+
 //loop handles all the coordination between new sockets
 //reading frames and dispatching events
 func (serv *SocketServer) loop(ws *websocket.Conn) {
@@ -183,6 +188,8 @@ func (serv *SocketServer) loop(ws *websocket.Conn) {
 	log.Debug.Println(s.ID(), "connected")
 
 	defer s.Close()
+
+	s.Join("__socket_id:"+s.ID())
 
 	serv.l.RLock()
 	e := serv.onConnectFunc

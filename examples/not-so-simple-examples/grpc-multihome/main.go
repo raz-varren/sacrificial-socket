@@ -15,6 +15,11 @@ import (
 	//"time"
 )
 
+type socketcast struct {
+	SocketID string `json:"socketId"`
+	Data     string `json:"data"`
+}
+
 type roomcast struct {
 	Room string `json:"room"`
 	Data string `json:"data"`
@@ -46,6 +51,9 @@ func main() {
 	s.On("echojson", EchoJSON)
 	s.On("join", Join)
 	s.On("leave", Leave)
+	s.On("socketcast", Socketcast)
+	s.On("socketcastbin", SocketcastBin)
+	s.On("socketcastjson", SocketcastJSON)
 	s.On("roomcast", Roomcast)
 	s.On("roomcastbin", RoomcastBin)
 	s.On("roomcastjson", RoomcastJSON)
@@ -120,6 +128,30 @@ func Leave(s *ss.Socket, data []byte) {
 	d := string(data)
 	s.Leave(d)
 	s.Emit("echo", "left room:"+d)
+}
+
+func Socketcast(s *ss.Socket, data []byte) {
+	var sc socketcast
+	err := json.Unmarshal(data, &sc)
+	check(err)
+
+	s.Socketcast(sc.SocketID, "socketcast", sc.Data)
+}
+
+func SocketcastBin(s *ss.Socket, data []byte) {
+	var sc socketcast
+	err := json.Unmarshal(data, &sc)
+	check(err)
+
+	s.Socketcast(sc.SocketID, "socketcastbin", []byte(sc.Data))
+}
+
+func SocketcastJSON(s *ss.Socket, data []byte) {
+	var sc socketcast
+	err := json.Unmarshal(data, &sc)
+	check(err)
+
+	s.Socketcast(sc.SocketID, "socketcastjson", sc)
 }
 
 func Roomcast(s *ss.Socket, data []byte) {

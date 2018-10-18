@@ -21,6 +21,8 @@
 	inEcho            = get('#in-echo'),
 	inJoin            = get('#in-join'),
 	inLeave           = get('#in-leave'),
+	inSocketcastID    = get('#in-socketcast-socket'),
+	inSocketcastData  = get('#in-socketcast-data'),
 	inBroadcast       = get('#in-broadcast'),
 	inRoomcastRoom    = get('#in-roomcast-room'),
 	inRoomcastData    = get('#in-roomcast-data'),
@@ -29,6 +31,9 @@
 	btnEchoJSON       = get('#btn-echo-json'),
 	btnJoin           = get('#btn-join'),
 	btnLeave          = get('#btn-leave'),
+	btnSocketcast     = get('#btn-socketcast'),
+	btnSocketcastBin  = get('#btn-socketcast-bin'),
+	btnSocketcastJSON = get('#btn-socketcast-json'),
 	btnBroadcast      = get('#btn-broadcast'),
 	btnBroadcastBin   = get('#btn-broadcast-bin'),
 	btnBroadcastJSON  = get('#btn-broadcast-json'),
@@ -71,6 +76,18 @@
 	
 	ws.on('echojson', function(data){
 		addMessage('got JSON: '+JSON.stringify(data));
+	});
+	
+	ws.on('socketcast', function(data){
+		addMessage('got socketcast: '+data);
+	});
+	
+	ws.on('socketcastbin', function(data){
+		addMessage('got binary socketcast: '+data.byteLength+' bytes - '+abToStr(data));
+	});
+	
+	ws.on('socketcastjson', function(data){
+		addMessage('got JSON socketcast: '+JSON.stringify(data));
 	});
 	
 	ws.on('roomcast', function(data){
@@ -146,6 +163,21 @@
 	btnBroadcastJSON.addEventListener('click', function(){
 		if(inBroadcast.value.length === 0) return;
 		ws.emit('broadcastjson', {message: inBroadcast.value});
+	});
+	
+	btnSocketcast.addEventListener('click', function(){
+		if(inSocketcastID.value.length === 0 || inSocketcastData.value.length === 0) return;
+		ws.emit('socketcast', JSON.stringify({socketId: inSocketcastID.value, data: inSocketcastData.value}));
+	});
+	
+	btnSocketcastBin.addEventListener('click', function(){
+		if(inSocketcastID.value.length === 0 || inSocketcastData.value.length === 0) return;
+		ws.emit('socketcastbin', strToAB(JSON.stringify({socketId: inSocketcastID.value, data: inSocketcastData.value})));
+	});
+	
+	btnSocketcastJSON.addEventListener('click', function(){
+		if(inSocketcastID.value.length === 0 || inSocketcastData.value.length === 0) return;
+		ws.emit('socketcastjson', {socketId: inSocketcastID.value, data: inSocketcastData.value});
 	});
 	
 	btnRoomcast.addEventListener('click', function(){

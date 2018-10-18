@@ -112,6 +112,11 @@ func (s *Socket) Broadcast(eventName string, data interface{}) {
 	s.serv.hub.broadcast(&BroadcastMsg{eventName, data})
 }
 
+//Socketcast dispatches an event to the specified socket ID.
+func (s *Socket) Socketcast(socketID, eventName string, data interface{}) {
+	s.serv.Roomcast("__socket_id:"+socketID, eventName, data)
+}
+
 //Emit dispatches an event to s.
 func (s *Socket) Emit(eventName string, data interface{}) error {
 	d, msgType := emitData(eventName, data)
